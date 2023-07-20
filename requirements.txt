@@ -1,0 +1,5 @@
+flask 
+sqlachemy
+Flask-SQLAlchemy
+marshmallow
+marshmallow-sqlachemy
