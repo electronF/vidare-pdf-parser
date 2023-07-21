@@ -3,27 +3,22 @@ import os
 from typing import Tuple
 
 #Import External librairies
-import connexion
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
 # Projest's modules
-from constants import DATABASE_NAME
+from constants import DATABASE_NAME, STATIC_PATH, TEMPLATES_PATH
 
 
-def configs() -> Tuple[SQLAlchemy, Marshmallow]:
+def configs() -> Tuple[Flask, SQLAlchemy, Marshmallow]:
     '''
         This setting up the necessary tools who will be use on the wold project 
     '''
     
-    rootdir = os.path.abspath(os.path.join(os.path.dirname(__file__), "controllers"))
     basedir = os.path.abspath(os.path.dirname(__file__))
-
-    # Create the connexion application instance
-    connex_app = connexion.App(__name__, specification_dir=rootdir)
-
-    # Get the underlying Flask app instance
-    app = connex_app.app
+    
+    app = Flask(__name__, static_folder=STATIC_PATH, template_folder=TEMPLATES_PATH)
 
     # Build the Sqlite ULR for SqlAlchemy
     DATABASE_PATH = os.path.join(basedir, DATABASE_NAME)
@@ -40,6 +35,6 @@ def configs() -> Tuple[SQLAlchemy, Marshmallow]:
     # Initialize Marshmallow
     ma = Marshmallow(app)
     
-    return connex_app, db, ma
+    return app, db, ma
     
 connexion_app, database, marsmallow = configs()

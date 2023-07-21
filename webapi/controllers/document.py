@@ -7,26 +7,28 @@ from flask import make_response, abort
 #Local modules
 from configs import database
 
-from models.document import Document, DocumentSchema 
-from models.page import Page, PageSchema
-from models.image import Image, ImageSchema
+from webapi.models.document import Document, DocumentSchema 
+from webapi.models.page import Page, PageSchema
+from webapi.models.image import Image, ImageSchema
 
 
 class Document:
     '''
         This class provide functions to get, edit, update and delete a document.
     '''
-    def read_all()->(Union[List[Dict[str, Any]], None]):
+    
+    
+    def read_all(self)->(Union[List[Dict[str, Any]], None]):
         """
         This function responds to a request for /api/document
         with the complete lists of documents.
         
-        Args:
+        Args:\n
         Returns:
             (List[Dict] | None): json string of list of documents
         """
         # Create the list of documents
-        documents = Document.query.order_by(Document.add_at).all()
+        documents = database.session.query(Document).order_by(Document.add_at).all()
 
         # Serialize the data for the response
         document_schema = DocumentSchema(many=True)
@@ -34,7 +36,7 @@ class Document:
         return data
 
 
-    def read_one(document_id:int)->(Union[Dict[str, Any], None]):
+    def read_one(self, document_id:int)->(Union[Dict[str, Any], None]):
         """
         This function responds to a request for /api/document/{id}
         with one matching document from the list of documents.
@@ -64,7 +66,7 @@ class Document:
             abort(404, f"Document not found for Id: {document_id}")
 
 
-    def create(document:Dict[str, Union[int, str, List[Dict]]]):
+    def create(self, document:Dict[str, Union[int, str, List[Dict]]]):
         """
         This function save a new document in the list of documents
         
@@ -104,7 +106,7 @@ class Document:
             abort(409, f"Document {name} with title {title} exists already")
 
 
-    def update(document_id:int, document:Dict[str, Union[int, str, Dict]]):
+    def update(self, document_id:int, document:Dict[str, Union[int, str, Dict]]):
         """
         This function updates an existing document in the list of documents.
         
@@ -143,7 +145,7 @@ class Document:
             abort(404, f"Document not found for Id: {document_id}")
 
 
-    def delete(document_id:int):
+    def delete(self, document_id:int):
         """
             This function deletes a document in the list of documents
             
@@ -164,3 +166,4 @@ class Document:
         # Otherwise, nope, didn't find that document
         else:
             abort(404, f"Document not found for Id: {document_id}")
+            

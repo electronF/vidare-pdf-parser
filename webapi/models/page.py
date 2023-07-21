@@ -2,12 +2,15 @@
 
 # External modules
 from sqlalchemy import (
-    Column, Integer,
-    String, ForeignKey
+    Integer,
+    String, 
+    ForeignKey
 )
 
 from sqlalchemy.orm import (
-    relationship, backref
+    mapped_column,
+    relationship, 
+    backref
 )
 
 from marshmallow_sqlalchemy import auto_field
@@ -15,19 +18,21 @@ from marshmallow_sqlalchemy import auto_field
 #Local modules
 from configs import database, marsmallow
 
-from image import Image
+from webapi.models.image import Image
 
 
 class Page(database.Model):
     __tablename__ = "pages"
-    id = Column(Integer, primary_key=True)
-    number = Column(Integer)
-    content = Column(String)
-    document_id = Column(Integer, ForeignKey("documents.id"))
+    id = mapped_column(Integer, primary_key=True)
+    number = mapped_column(Integer)
+    content = mapped_column(String)
+    path = mapped_column(String)
+    document_id = mapped_column(ForeignKey("documents.id"))
     
     images = relationship(
         "Image", 
         backref=backref("pages"),
+        primaryjoin="and_(foreign(Page.id)==Image.page_id)",
         cascade="all, delete, delete-orphan",
         single_parent=True,
         order_by="desc(Image.order)"
@@ -35,10 +40,11 @@ class Page(database.Model):
     
 
     def __repr__(self) -> str:
-        return """Page(id={}, number={}, content='{}', document_id={}, images='{} images included')""".format(
+        return """Page(id={}, number={}, content='{}', path='{}', document_id={}, images='{} images included')""".format(
             self.id,
             self.number, 
             self.content[:10]+ ('...' if self.content else ''), 
+            self.path,
             self.document_id,
             len(self.images)
         )
@@ -47,9 +53,6 @@ class Page(database.Model):
 class PageSchema(marsmallow.SQLAlchemySchema):
     class Meta:
         model = Page
-        load_instance = True #Optional: deserialize to model instance
-    id = auto_field()
-    number = auto_field()
-    content = auto_field()
-    document_id = auto_field()
-    images = auto_field()
+        include_fk = True
+        load_instance = True
+    

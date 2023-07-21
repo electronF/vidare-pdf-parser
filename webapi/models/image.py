@@ -2,8 +2,16 @@
 
 # External modules
 from sqlalchemy import (
-    Column, Integer,
-    String, ForeignKey
+    Integer,
+    String,
+    ForeignKey
+)
+
+from sqlalchemy.sql.sqltypes import NullType
+
+
+from sqlalchemy.orm import (
+    mapped_column
 )
 
 from marshmallow_sqlalchemy import auto_field
@@ -14,11 +22,11 @@ from configs import database, marsmallow
 
 class Image(database.Model):
     __tablename__ = "images"
-    id = Column(Integer, primary_key=True)
-    path = Column(String)
-    name = Column(String)
-    page_id = Column(Integer, ForeignKey("pages.id"))
-    order = Column(Integer)
+    id = mapped_column(Integer, primary_key=True)
+    path = mapped_column(String,)
+    name = mapped_column(String,)
+    page_id = mapped_column(ForeignKey("pages.id"))
+    order = mapped_column(Integer)
     
 
     def __repr__(self) -> str:
@@ -34,9 +42,5 @@ class Image(database.Model):
 class ImageSchema(marsmallow.SQLAlchemySchema):
     class Meta:
         model = Image
+        include_fk = True
         load_instance = True #Optional: deserialize to model instance
-    id = auto_field()
-    name = auto_field()
-    path = auto_field()
-    page_id = auto_field()
-    order = auto_field()
