@@ -1,0 +1,59 @@
+@keyframes animatedBackground {
+    from {
+      background-position: 0 100%;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+}
+
+@-webkit-keyframes animatedBackground {
+    from {
+      background-position: 0 100%;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+}
+
+
+.inconstructiont-message
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+
+    background-image: url("./../images/background_cloud_reverse.png");
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+    background-position: 0 100%;
+    background-size: 90% 15%;
+    animation: animatedBackground 5s linear infinite alternate;
+    -webkit-animation: animatedBackground 5s linear infinite alternate;
+}
+
+.inconstructiont-message div
+{
+    margin: auto;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
+}
+
+.inconstructiont-message div span:first-child
+{
+    font-size: 4rem;
+    font-weight: 700;
+    color: #00796B;
+}
+
+.inconstructiont-message div span:last-child
+{
+    font-size: 2rem;
+    font-weight: 300;
+    color: #000;
+}
