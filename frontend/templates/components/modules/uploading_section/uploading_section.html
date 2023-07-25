@@ -1,0 +1,27 @@
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uploading_section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/upload_section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uploading_item.css') }}">
+    
+{% endblock %}
+{% from 'components/uix/uploading_item/uploading_item.html' import uploading_item %}
+{% block body %}
+
+    <div class="uploading-section">
+        <div class="upload-section" title="drag your pdf or presentation document here to upload it">
+            <div>
+                <div class="upload-icon"><img src="{{url_for('static', filename='images/upload-icon.webp')}}" alt=""></div>
+                <span class="text">Drag file to upload</span>
+                <button class="browse-button">Browse</button>
+            </div>
+        </div>
+        <div class="progress-section">
+            <span class="title">Uploading</span>
+            <div id="uploading-items">
+                {% for i in range(2) %}
+                    {{  uploading_item('doc-{}'.format(i), 'Document{}'.format(i), '12.5Mo', type=('PDF', 'PPT')[i==1]) }}
+                {% endfor %}
+            </div>
+        </div> 
+    </div>
+{% endblock %}

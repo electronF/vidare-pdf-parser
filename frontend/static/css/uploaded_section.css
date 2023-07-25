@@ -1,0 +1,36 @@
+.uploaded-section
+{
+    display: flex;
+    flex-direction: column;
+    
+    background-color: #FFFFFF;
+    padding: 45px 60px ;
+    border-radius: 23px;
+    width: inherit;
+    background-blend-mode: normal;
+    box-shadow: 0px 2px 4px rgba(100,100,100,0.5);
+}
+
+.uploaded-section > .title
+{
+    color: #757575;
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.uploaded-section .uploaded-files
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    width: 100%;
+    align-items: center;
+
+}
+
+.uploaded-section .uploaded-files .uploaded-item
+{
+    margin-bottom: 30px;
+}
+

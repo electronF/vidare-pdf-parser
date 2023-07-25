@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block head %} 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <title> Dashboard </title>
+{% endblock %}
+ 
+{% block body %} 
+    <div class="content">
+        {% include 'components/modules/titlebar/titlebar.html' %}
+        {% include 'components/modules/uploading_section/uploading_section.html' %}
+        {% include 'components/modules/uploaded_section/uploaded_section.html' %}
+    </div>
+{% endblock %}

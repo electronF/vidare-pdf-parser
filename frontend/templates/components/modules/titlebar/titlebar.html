@@ -1,0 +1,18 @@
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/title_bar.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="title-bar">
+        <a href="/">
+            <div class="app-logo">
+                <img src="{{url_for('static', filename='images/vidare_logo.webp')}}" alt="Vidare logo" title="Vidare">
+            </div>  
+        </a>
+        <div class="app-description">
+            <span class="app-name"> Vidare Pitch deck parser </span>
+            <span class="short-description"> Upload your Picth desk as PDF or presentation file (.odt, .ppt, .pptx) and download its extracted content.</span>
+        </div>
+        
+    </div>
+{% endblock %}

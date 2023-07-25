@@ -1,0 +1,142 @@
+.uploaded-item
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.uploaded-item .cover-image
+{
+    width: 164px;
+    height: 164px;
+
+
+    flex-grow: 1;
+    border: 1px solid #808080;
+    border-radius: 13px;
+    box-shadow: 0px 0px 4px 1px rgba(100, 100, 100, .5);
+    display: flex;
+
+    margin-right: 20px;
+
+}
+
+.uploaded-item .cover-image img
+{
+    width: 64px;
+    height: 64px;
+    margin: auto;
+    align-self: center;
+}
+
+.uploaded-item .content-description
+{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    color: #757575;
+    width: 72%;
+}
+
+.uploaded-item .content-description .title
+{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.uploaded-item .content-description .file-path
+{
+    margin: 11px 0;
+    font-size: 12px;
+
+}
+
+.uploaded-item .content-description .text-content
+{
+    font-size: 14px;
+    margin-bottom: 11px;
+}
+
+.uploaded-item .content-description .footer
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    font-size: 12px;
+    color: #757575;
+}
+
+
+.uploaded-item .content-description .footer .info
+{
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+}
+
+.uploaded-item .content-description .footer .info .file-type
+{
+    font-weight: 700;
+}
+
+.uploaded-item .content-description .footer .info .divider
+{
+    font-weight: 600;
+    margin: 0 7px;
+}
+
+.uploaded-item .content-description .footer .actions
+{
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+}
+
+
+.uploaded-item .content-description .footer .actions button:first-child
+{
+    margin-right: 53px;
+}
+
+.uploaded-item .content-description .footer .actions button
+{
+    background-color: transparent;
+    border: none;
+    display: flex;
+    padding: 2px 10px;
+}
+
+
+.uploaded-item .content-description .footer .actions button .icon
+{
+    width: 24px;
+    height: 24px;
+    margin: auto;
+    align-self: center;
+}
+
+.uploaded-item .content-description .footer .actions button span
+{
+    align-self: center;
+    margin-left: 9px;
+    color: #757575;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.uploaded-item .content-description .footer .actions button:hover
+{
+    
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: rgba(0, 12, 119, .2);
+}
+
+.uploaded-item .content-description .footer .actions button:hover span
+{
+    color: #000C77;
+}
+
+

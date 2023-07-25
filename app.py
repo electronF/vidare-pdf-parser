@@ -12,8 +12,9 @@ connex_app = configs.connexion_app
 
 
 # Create a URL route in our application for "/"
-@connex_app.route("/")
-def home():
+@connex_app.route('/', defaults={'path': ''})
+@connex_app.route('/<path:path>')
+def home(path:str):
     """
     This function just responds to the browser URL
     localhost:5000/
@@ -21,7 +22,7 @@ def home():
     """
     # document = Document()
     # print(document.read_all())
-    return render_template("index.html")
+    return render_template("dashboard.html")
 
 
 # # Create a URL route in our application for "/people"

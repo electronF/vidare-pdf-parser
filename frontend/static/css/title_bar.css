@@ -1,0 +1,52 @@
+.title-bar
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.title-bar .app-logo 
+{
+    align-self: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 23px;
+    border: 7px solid #ebebeb;
+    background: #ffffff;
+    background-blend-mode: normal;
+    box-shadow: 0px 2px 4px rgba(100,100,100,0.5);
+
+    display: flex;
+}
+
+.title-bar .app-logo img
+{
+    width: 100%;
+    align-self: auto;
+    margin: auto;
+}
+
+.title-bar .app-description
+{
+    display: flex;
+    flex-direction: column;
+
+    margin-left: 30px;
+    align-self: center;
+}
+
+.title-bar .app-name
+{
+    font-size: 32px;
+    color: #000C77;
+    font-weight: 600;
+
+    margin-bottom: 20px;
+}
+
+.title-bar .short-description
+{
+    font-size: 14px;
+    color: #757575;
+    max-width: 500px;
+}

@@ -1,0 +1,23 @@
+{% macro uploaded_item(title, file_path, short_content, file_type, datetime, image_path='image-icon.webp')  -%}
+    <div class="uploaded-item" title="">
+        <div class="cover-image">
+            <img src="{{url_for('static', filename='images/{}'.format(image_path))}}" alt="cover image">
+        </div>
+        <div class="content-description">
+            <span class="title">{{title}}</span>
+            <span class="file-path">{{file_path}}</span>
+            <div class="text-content">{{short_content}}</div>
+            <div class="footer">
+                <div class="info">
+                    <span class="file-type">{{file_type}}</span>
+                    <span class="divider">|</span>
+                    <span class="datetime">{{datetime}}</span>
+                </div>
+                <div class="actions">
+                    <button> <img  class="icon" src="{{url_for('static', filename='images/trash-icon.webp')}}" /><span>Delete</span> </button>
+                    <button> <img class="icon" src="{{url_for('static', filename='images/eye-icon.webp')}}" /><span>View</span> </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{%- endmacro %}

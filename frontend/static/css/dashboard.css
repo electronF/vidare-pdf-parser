@@ -1,0 +1,28 @@
+body
+{
+    display: flex;
+    align-items: center;
+}
+
+.content
+{
+    display:  flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    width: 80%;
+    margin: 100px auto;
+    align-self: auto;
+}
+
+.content > *
+{
+    align-self: center;
+    margin: auto;
+    margin-bottom: 88px;
+}
+
+.content > *:last-child
+{
+    margin-bottom: 0;
+}

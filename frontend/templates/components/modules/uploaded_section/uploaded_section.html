@@ -1,0 +1,16 @@
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uploaded_section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uploaded_item.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% from 'components/uix/uploaded_item/uploaded_item.html' import uploaded_item %}
+    <div class="uploaded-section">
+        <span class="title"> Uploaded files </span>
+        <div class="uploaded-files">
+            {% for i in range(2) %}
+                {{ uploaded_item('A super interesting title', 'C:\\Users\\Vidare\\Desktop\\Document1.pdf', 'A number of key issues arise from the belief that in terms of the essential component requires urgent actions to be taken towards The Control of New Evolution (Jake Acevedo in The Book of the Basic Reason of The Principles of Effective Management) ', 'PDF', '24 June 2023 at 17:16:20', 'image-icon.webp')  }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

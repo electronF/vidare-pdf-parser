@@ -1,0 +1,156 @@
+.uploading-item
+{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 2px 2px;
+}
+
+.uploading-item .logo
+{
+    align-self: center;
+    width: 64px;
+    height: 64px;
+}
+
+.uploading-item .logo img
+{
+    width: 100%;
+    align-self: center;
+    margin: auto;
+}
+
+.uploading-item .details
+{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    flex-grow: 1;
+    padding-right: 3px;
+}
+
+.uploading-item .details .header
+{
+    display: flex;
+    flex-direction: row;
+}
+
+.uploading-item .details .header .name
+{
+    margin-right: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #757575;
+}
+
+.uploading-item .details .header .size
+{
+    margin-right: 30px;
+    font-size: 14px;
+    color: #757575;
+}
+
+.uploading-item .details .header .close
+{
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    display: flex;
+    padding: 2px;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    border: 1px solid #D3D3D3;
+}
+
+.uploading-item .details .header .close:hover
+{
+    background-color: #D3D3D3;
+}
+
+
+.uploading-item .details .header .close img
+{
+    width: 100%;
+    margin: auto;
+    align-self: center;
+}
+
+.uploading-item .details .progress-bar
+{
+    width: 100%;
+    align-self: auto;
+    margin: auto;
+}
+
+.uploading-item .details .progress-bar input
+{
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+
+    border-radius: 5px;
+    background: #D3D3D3;
+    width: 100%;
+}
+
+
+.uploading-item .details .progress-bar input:disabled
+{
+    -webkit-appearance: none;
+    appearance: none;
+
+    background-color: #D3D3D3;
+}
+
+.uploading-item .details .progress-bar input::-webkit-slider-thumb
+{
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    background-color: transparent;
+}
+
+.uploading-item .details .progress-bar input::-moz-range-thumb
+{
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    background-color: transparent;
+}
+
+.uploading-item .details .progress-bar input::-webkit-slider-runnable-track {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+
+    background: #053a5f;
+    accent-color: #053a5f;
+    content: '';
+    pointer-events: none;
+  }
+  
+  /******** Firefox ********/
+  .uploading-item .details .progress-bar input::-moz-range-track {
+    background: #053a5f;
+  }
+
+.uploading-item .details .progression-label
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    font-size: 14px;
+    color: #757575;
+    padding: 0 0px;
+
+}
+
+.uploading-item .details .progression-label .percentage
+{
+    font-weight: 600;
+    margin-right: 10px;
+}
