@@ -6,6 +6,7 @@ from typing import Tuple
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from sqlalchemy.orm import sessionmaker
 
 # Projest's modules
 from constants import DATABASE_NAME, STATIC_PATH, TEMPLATES_PATH
@@ -16,7 +17,7 @@ def configs() -> Tuple[Flask, SQLAlchemy, Marshmallow]:
         This setting up the necessary tools who will be use on the wold project 
     '''
     
-    basedir = os.path.abspath(os.path.dirname(__file__))
+    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'webapi'))
     
     app = Flask(__name__, static_folder=STATIC_PATH, template_folder=TEMPLATES_PATH)
 
@@ -28,12 +29,16 @@ def configs() -> Tuple[Flask, SQLAlchemy, Marshmallow]:
     app.config["SQLALCHEMY_ECHO"] = False
     app.config["SQLALCHEMY_DATABASE_URI"] = sqlite_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 
     # Create the SqlAlchemy db instance
     db = SQLAlchemy(app)
 
     # Initialize Marshmallow
     ma = Marshmallow(app)
+    
+    # with app.app_context():
+    #     db.create_all()
     
     return app, db, ma
     

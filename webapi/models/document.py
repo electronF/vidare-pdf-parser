@@ -38,7 +38,7 @@ class Document(database.Model):
                 )
     
     pages = relationship(
-        "Document", 
+        "Page", 
         backref=backref("documents"),
         primaryjoin="and_(foreign(Document.id)==Page.document_id)",
         cascade="all, delete, delete-orphan",

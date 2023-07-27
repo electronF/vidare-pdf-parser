@@ -13,11 +13,8 @@ from sqlalchemy.orm import (
     backref
 )
 
-from marshmallow_sqlalchemy import auto_field
-
 #Local modules
 from configs import database, marsmallow
-
 from webapi.models.image import Image
 
 
@@ -27,8 +24,7 @@ class Page(database.Model):
     number = mapped_column(Integer)
     content = mapped_column(String)
     path = mapped_column(String)
-    document_id = mapped_column(ForeignKey("documents.id"))
-    
+    document_id = mapped_column(Integer, ForeignKey("documents.id"))
     images = relationship(
         "Image", 
         backref=backref("pages"),
@@ -37,7 +33,6 @@ class Page(database.Model):
         single_parent=True,
         order_by="desc(Image.order)"
     )
-    
 
     def __repr__(self) -> str:
         return """Page(id={}, number={}, content='{}', path='{}', document_id={}, images='{} images included')""".format(

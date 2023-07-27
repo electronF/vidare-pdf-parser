@@ -1,4 +1,5 @@
 import UploadingItem from "./components/uploading_item.js"
+import { fileVerificator, fileSize, fileName } from "./utils/function.js";
 
 $('div.upload-section .browse-button').on('click', ()=>{
     var uploadedItems = $('#uploading-items');
@@ -17,20 +18,29 @@ $('div.upload-section .browse-button').on('click', ()=>{
     inputFiles[0].onchange = () => {
         var count = 0
         var files = {}
+        var paths = inputFiles.value.split(';')
         
         for(var file of inputFiles[0].files)
         {
-
-            count++; 
-            uploadedItems.append(
-                (new UploadingItem(
-                    count, 
-                    file.name, 
-                    `${(file.size/(1024 * 1024)).toFixed(2)} Mo`, 
-                    file.type.split('/')[1])
-                ).render()
-            )
-            files[`file-${count}`] = file
+            var message = fileVerificator(file)
+            if(message===null)
+            {
+                count++; 
+                
+                uploadedItems.append(
+                    (new UploadingItem(
+                        count, 
+                        fileName(file.name), 
+                        `${fileSize(file.size)}`, 
+                        file.type.split('/')[1])
+                    ).render()
+                )
+                files[`file-${count}`] = {'file':file, 'path': paths[count-1]}
+            } 
+            else
+            {
+                alert(message)
+            }   
         }
     }
 })

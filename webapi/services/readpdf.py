@@ -36,7 +36,7 @@ class PdfParser:
             os.makedirs(self.output_images_path)
         
     
-    def get_content(self) -> List[Dict[str, Union[str, int, Dict[str, Union[str, int]]]]]:   
+    def get_content(self) -> List[Dict[str, Union[str, int, Dict[str, str]]]]:   
         '''
             This function parse the PDF and return the content of the documents like
             text and images descriptions. The extracted data are saved on the provided 
@@ -44,11 +44,11 @@ class PdfParser:
             
             Args:\n
             Returns:
-                (List[Dict[str, str | int | Dict[str, Union[str, int]]]]): The content of the PDF. The
+                (List[Dict[str, str | int | Dict[str, str]]]): The content of the PDF. The
                 list of pages and associated images decription.
         '''     
         
-        content:List[str, Union[str, int, Dict]] = []
+        content:List[Dict[str, Union[str, int, Dict[str, str]]]] = []
         with open(self.file_path, "rb") as pdf_file:
             read_pdf = pypdf.PdfReader(pdf_file)
             for page_itr in range(len(read_pdf.pages)):
@@ -58,7 +58,7 @@ class PdfParser:
                 page_name = f'page{page_itr}.txt'
                 page_path = os.path.join(self.output_texts_path, page_name)
                 content.append({
-                    'page': page_itr,
+                    'number': page_itr,
                     'text': page_content,
                     'path': page_path,
                     'images': []

@@ -16,12 +16,13 @@ function fileVerificator(file)
     {
         return `The file you choose is not a PDF, ODT, PPT or PPTX`
     }
+    return null
 }
 
 
 function fileName(name)
 {
-    var part = ''.split('/')
+    var part = name.split('/')
     return part[part.length - 1].split('.')[0]
 }
 
@@ -31,10 +32,10 @@ function fileSize(size)
     if(size < 1024)
         return `${size} B`
     else if(size < 1024*1024)
-        return `${size/1024} KB`
+        return `${(size/1024).toFixed(2)} KB`
     else if(size < 1024*1042*1024)
-        return `${size/(1024 * 1024)} MB`
-    return `${size/(1024 * 1024 * 1024)} GB`
+        return `${(size/(1024 * 1024)).toFixed(2)} MB`
+    return `${(size/(1024 * 1024 * 1024)).toFixed(2)} GB`
 }
 
 

@@ -7,14 +7,10 @@ from sqlalchemy import (
     ForeignKey
 )
 
-from sqlalchemy.sql.sqltypes import NullType
-
 
 from sqlalchemy.orm import (
     mapped_column
 )
-
-from marshmallow_sqlalchemy import auto_field
 
 #Local modules
 from configs import database, marsmallow
@@ -25,8 +21,8 @@ class Image(database.Model):
     id = mapped_column(Integer, primary_key=True)
     path = mapped_column(String,)
     name = mapped_column(String,)
-    page_id = mapped_column(ForeignKey("pages.id"))
-    order = mapped_column(Integer)
+    page_id = mapped_column(Integer, ForeignKey("pages.id"))
+    order = mapped_column(Integer, default=0)
     
 
     def __repr__(self) -> str:

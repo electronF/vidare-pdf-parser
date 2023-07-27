@@ -1,4 +1,4 @@
-async function saveFile(file, endpoint) 
+async function getFiles(endpoint) 
 {
     const ctrl = new AbortController()    // timeout
     setTimeout(() => ctrl.abort(), 500000);

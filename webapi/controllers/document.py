@@ -10,15 +10,16 @@ from configs import database
 from webapi.models.document import Document, DocumentSchema 
 from webapi.models.page import Page, PageSchema
 from webapi.models.image import Image, ImageSchema
+from webapi.modelsDTO.document import DocumentDTO
 
 
-class Document:
+class DocumentController:
     '''
         This class provide functions to get, edit, update and delete a document.
     '''
     
-    
-    def read_all(self)->(Union[List[Dict[str, Any]], None]):
+    @classmethod
+    def read_all(cls)->(Union[List[Dict[str, Any]], None]):
         """
         This function responds to a request for /api/document
         with the complete lists of documents.
@@ -35,8 +36,8 @@ class Document:
         data = document_schema.dump(documents)
         return data
 
-
-    def read_one(self, document_id:int)->(Union[Dict[str, Any], None]):
+    @classmethod
+    def read_one(cls, document_id:int)->(Union[Dict[str, Any], None]):
         """
         This function responds to a request for /api/document/{id}
         with one matching document from the list of documents.
@@ -65,48 +66,77 @@ class Document:
         else:
             abort(404, f"Document not found for Id: {document_id}")
 
-
-    def create(self, document:Dict[str, Union[int, str, List[Dict]]]):
+    @classmethod
+    def create(cls, document:DocumentDTO):
         """
         This function save a new document in the list of documents
         
         Args:
-            document (Dict[str, int | str | Dict]): The document and its assets. 
+            document(DocumentDTO): The document and its assets. 
+            
         Returns:
             (Dict | None): 201 on success and the update document object, 
                 406 if document is already exists.
         """
-        name = document.get("name", None).lower()
-        title = document.get("title", None)
-
-        existing_document = (
-            Document.query.filter(Document.name == name)
-            .filter(Document.title == title)
-            .one_or_none()
+        title = ''
+        for page in document.pages:
+            temp_title = page['text'].strip()
+            if len(title) > 5:
+                title = temp_title[:100]
+                break
+        
+        for page in document.pages:
+            text = page['text'].strip()
+            if len(text) > 50:
+                content = page['text']
+                break
+        
+        db_model_document = Document(
+            name = document.name, 
+            title = title,
+            author = '',
+            path = document.path,
+            publication_date = None
         )
-
+        content = ''
+        for page in document.pages:
+            page_obj = Page(
+                number = page['number'],
+                content = page['text'],
+                path = page['path']
+            )
+            db_model_document.pages.append(page_obj)
+            
+            for image in page['images']:
+                page_obj.images.append(
+                    Image(
+                    path = image['path'],
+                    name = image['name'],
+                    order = image['order']
+                    )
+                )
+            
         # Does the document could be inserted?
-        if existing_document is None:
-
+        try:
+            # Add the document to the database
+            database.session.add(db_model_document)
+            database.session.commit()
+            
             # Create a document instance using the schema
             schema = DocumentSchema()
-            new_document = schema.load(document, session=database.session)
-
-            # Add the document to the database
-            database.session.add(new_document)
-            database.session.commit()
+            # new_document = schema.load(db_model_document, session=database.session)
 
             # Serialize and return the newly created document in the response
             data = schema.dump(document)
+            data['content'] = content
 
             return make_response(data, 201)
+        except:
+            # Otherwise, nope, document exists already
+            abort(409, f"Document {document.name} exists already")
 
-        # Otherwise, nope, document exists already
-        else:
-            abort(409, f"Document {name} with title {title} exists already")
-
-
-    def update(self, document_id:int, document:Dict[str, Union[int, str, Dict]]):
+    @classmethod
+    def update(cls, document_id:int, document:Dict[str, Union[int, str, Dict]]):
         """
         This function updates an existing document in the list of documents.
         
@@ -144,8 +174,8 @@ class Document:
         else:
             abort(404, f"Document not found for Id: {document_id}")
 
-
-    def delete(self, document_id:int):
+    @classmethod
+    def delete(cls, document_id:int):
         """
             This function deletes a document in the list of documents
             

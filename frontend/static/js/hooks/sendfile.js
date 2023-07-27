@@ -1,8 +1,9 @@
 
-async function saveFile(file, endpoint) 
+async function saveFile(file, path, endpoint) 
 {
     let formData = new FormData();
     formData.append("file", file);
+    formData.append('path', path)
 
     const ctrl = new AbortController()    // timeout
     setTimeout(() => ctrl.abort(), 500000);
