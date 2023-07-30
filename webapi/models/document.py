@@ -25,10 +25,10 @@ from webapi.models.page import Page
 class Document(database.Model):
     __tablename__ = "documents"
     id = mapped_column(Integer, primary_key=True)
-    name = mapped_column(String)
-    title = mapped_column(String)
-    author = mapped_column(String)
-    path = mapped_column(String)
+    name = mapped_column(String, nullable=False)
+    title = mapped_column(String, default='')
+    author = mapped_column(String, default=None)
+    path = mapped_column(String, nullable=False)
     publication_date = mapped_column(DateTime)
     
     add_at = mapped_column(
@@ -40,7 +40,7 @@ class Document(database.Model):
     pages = relationship(
         "Page", 
         backref=backref("documents"),
-        primaryjoin="and_(foreign(Document.id)==Page.document_id)",
+        # primaryjoin="and_(foreign(Document.id)==Page.document_id)",/
         cascade="all, delete, delete-orphan",
         single_parent=True,
         order_by="desc(Page.number)"
@@ -55,14 +55,20 @@ class Document(database.Model):
             self.path,
             self.publication_date,
             self.add_at,
-            len(self.pages)
+            len([] if self.pages==None else self.pages)
         )
 
 
 class DocumentSchema(marsmallow.SQLAlchemySchema):
     class Meta:
         model = Document
-        include_fk = True
         load_instance = True
-
+    id = auto_field()
+    name = auto_field()
+    title = auto_field()
+    author = auto_field()
+    path = auto_field()
+    publication_date = auto_field()
+    add_at = auto_field()
+    pages = auto_field()
 

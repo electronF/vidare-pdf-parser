@@ -13,6 +13,8 @@ from sqlalchemy.orm import (
     backref
 )
 
+from marshmallow_sqlalchemy import auto_field
+
 #Local modules
 from configs import database, marsmallow
 from webapi.models.image import Image
@@ -28,7 +30,7 @@ class Page(database.Model):
     images = relationship(
         "Image", 
         backref=backref("pages"),
-        primaryjoin="and_(foreign(Page.id)==Image.page_id)",
+        # primaryjoin="and_(foreign(Page.id)==Image.page_id)",
         cascade="all, delete, delete-orphan",
         single_parent=True,
         order_by="desc(Image.order)"
@@ -50,4 +52,9 @@ class PageSchema(marsmallow.SQLAlchemySchema):
         model = Page
         include_fk = True
         load_instance = True
-    
+    id = auto_field()
+    number = auto_field()
+    content = auto_field()
+    path = auto_field()
+    document_id = auto_field()
+    images = auto_field()

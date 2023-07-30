@@ -12,6 +12,8 @@ from sqlalchemy.orm import (
     mapped_column
 )
 
+from marshmallow_sqlalchemy import auto_field
+
 #Local modules
 from configs import database, marsmallow
 
@@ -40,3 +42,8 @@ class ImageSchema(marsmallow.SQLAlchemySchema):
         model = Image
         include_fk = True
         load_instance = True #Optional: deserialize to model instance
+    id = auto_field()
+    path = auto_field()
+    name = auto_field()
+    page_id = auto_field()
+    order = auto_field()

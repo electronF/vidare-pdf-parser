@@ -1,10 +1,9 @@
-
 # Built-in modules
 import os
 from typing import Dict, List, Union
 
 # Extracted modules
-import pypdf
+import PyPDF2 as pypdf
 
 #Local modules
 
@@ -20,14 +19,15 @@ class PdfParser:
             
             Args:
                 file_path(str): The path of the PDF. 
-                ouput_dir_path(str): The folder where image will be saved.
+                ouput_dir_path(str): The folder where texts and images will be saved.
             Returns:
                 None
         '''
         self.file_path = file_path
         file_name, _ = os.path.splitext(os.path.basename(file_path))
-        self.output_texts_path = os.path.join(output_dir_path, file_name, 'texts')
-        self.output_images_path = os.path.join(output_dir_path, file_name, 'images')
+        self.path_to_folder = os.path.join(output_dir_path, file_name)
+        self.output_texts_path = os.path.join(self.path_to_folder, 'texts')
+        self.output_images_path = os.path.join(self.path_to_folder, 'images')
         
         if not os.path.exists(self.output_texts_path):
             os.makedirs(self.output_texts_path)
@@ -50,9 +50,9 @@ class PdfParser:
         
         content:List[Dict[str, Union[str, int, Dict[str, str]]]] = []
         with open(self.file_path, "rb") as pdf_file:
-            read_pdf = pypdf.PdfReader(pdf_file)
-            for page_itr in range(len(read_pdf.pages)):
-                page = read_pdf.pages[page_itr]
+            pdf_reader = pypdf.PdfReader(pdf_file)
+            for page_itr in range(len(pdf_reader.pages)):
+                page = pdf_reader.pages[page_itr]
                 page_content = page.extract_text()
                 
                 page_name = f'page{page_itr}.txt'
@@ -80,3 +80,21 @@ class PdfParser:
                         )
     
         return content 
+    
+    def split_first_page(self)->str:
+        '''
+            This method split the first page of the PDF and return a path to this page
+            on the disk.
+            
+            Args:
+            Returns:
+                (str): The path to the page on the disk or raise an error.
+        '''
+        with open(self.file_path, "rb") as pdf_file:
+            pdf_reader = pypdf.PdfReader(pdf_file)
+            pdf_writer = pypdf.PdfWriter()
+            pdf_writer.add_page(pdf_reader.pages[0])
+            output_filename = os.path.join(self.path_to_folder, 'page0.pdf')
+            with open(output_filename, 'wb') as out:
+                pdf_writer.write(out)
+            return output_filename

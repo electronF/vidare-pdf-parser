@@ -2,7 +2,13 @@
 import os
 
 # 3rd party moudles
-from flask import render_template, jsonify, request
+from flask import (
+    render_template, 
+    jsonify, 
+    request,
+    make_response,
+    abort
+)
 
 # Local modules
 import configs
@@ -12,11 +18,13 @@ import utils.filemanager as filemanager
 from webapi.modelsDTO.document import DocumentDTO
 from webapi.controllers.document import DocumentController
 from webapi.services.readpdf import PdfParser
+from webapi.services.pdfconverter import PDF2ImageConverter
 
 
 # Get the application instance
 connex_app = configs.connexion_app
 connex_app.app_context().push()
+
 
 @connex_app.before_first_request
 def init():
@@ -52,6 +60,7 @@ def get_documents():
     """
     return jsonify(DocumentController.read_all())
 
+
 # Create a URL route in our application for "/api/document/"
 @connex_app.route("/api/document/", methods=['POST'])
 def create_document():
@@ -63,12 +72,13 @@ def create_document():
     Returns:
         Uploading percentage
     """
-    uploaded_info = ""
-    failed_info = ""
-    # request.form.get()
-    response = {}
-    for file_key in  request.files:
-        file_obj = request.files[file_key]
+    uploaded_info = []
+    failed_info = []
+    connex_app.logger.info('test2', request.form.get('path', None) == None)
+    
+    if request.files.get('file', None) != None and request.form.get('path', None) != None:
+        file_obj = request.files['file']
+        file_path = request.form.get('path')
         new_name = filemanager.save_file(file_obj, constants.UPLOADED_FILES)
         if new_name != None:
             filename, _ = os.path.splitext(new_name)
@@ -80,14 +90,33 @@ def create_document():
             # Extract information in PDF and save then. The get all the information to use
             parser = PdfParser(os.path.join(constants.UPLOADED_FILES, new_name), output_dir)
             pages = parser.get_content()
-            document = DocumentDTO(name=filename, path='', pages=pages)
-            response = DocumentController.create(document)
+            first_page_path = parser.split_first_page()
             
-            uploaded_info += f'mimetype:{file_obj.mimetype} uploaded_name:{file_obj.filename}, new_name:{new_name}\n'
+            response = DocumentController.create(DocumentDTO(name=filename, path=file_path, pages=pages))
+            if response['success'] == False:
+                response['image_path'] = PDF2ImageConverter(first_page_path, output_dir).convert_first_page()
+            
+            # response['success']=True
+            
+            # jsonify({'path': file_path, 'name': file_obj.filename, })
+            return make_response(201, response)
         else:
-            failed_info +=  f'mimetype:{file_obj.mimetype} uploaded_name:{file_obj.filename}\n'
-    
-    return jsonify(response)
+            connex_app.logger.error('Filename error', 'The filename is None or no file name has been found')
+            return make_response(
+                {
+                    'success':False,  
+                    'message':'Something happens wrong on saver with filename.'
+                },
+                500,
+            )
+    else:
+        return make_response(
+            {
+                'success':False,  
+                'message':'Something happens wrong on saver with filename.'
+            },
+            500
+        )
 
 
 # Create a URL route in our application for "/api/document/"

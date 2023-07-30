@@ -2,10 +2,10 @@
 from typing import Dict, List, Union, Any
 
 # External modules
-from flask import make_response, abort
+from flask import make_response, abort, jsonify
 
 #Local modules
-from configs import database
+from configs import database, connexion_app
 
 from webapi.models.document import Document, DocumentSchema 
 from webapi.models.page import Page, PageSchema
@@ -64,7 +64,7 @@ class DocumentController:
 
         # Otherwise, nope, didn't find that document
         else:
-            abort(404, f"Document not found for Id: {document_id}")
+            return make_response( {'success':True, 'message':f"Document not found for Id: {document_id}"}, 404)
 
     @classmethod
     def create(cls, document:DocumentDTO):
@@ -85,6 +85,7 @@ class DocumentController:
                 title = temp_title[:100]
                 break
         
+        content = ''
         for page in document.pages:
             text = page['text'].strip()
             if len(text) > 50:
@@ -96,16 +97,15 @@ class DocumentController:
             title = title,
             author = '',
             path = document.path,
-            publication_date = None
+            publication_date = None,
         )
-        content = ''
+        
         for page in document.pages:
             page_obj = Page(
                 number = page['number'],
                 content = page['text'],
                 path = page['path']
             )
-            db_model_document.pages.append(page_obj)
             
             for image in page['images']:
                 page_obj.images.append(
@@ -115,6 +115,7 @@ class DocumentController:
                     order = image['order']
                     )
                 )
+            db_model_document.pages.append(page_obj)
             
         # Does the document could be inserted?
         try:
@@ -129,11 +130,14 @@ class DocumentController:
             # Serialize and return the newly created document in the response
             data = schema.dump(document)
             data['content'] = content
+            
 
             return make_response(data, 201)
-        except:
+        except Exception as error:
             # Otherwise, nope, document exists already
-            abort(409, f"Document {document.name} exists already")
+            # abort(409, f"Document {document.name} exists already")
+            connexion_app.logger.error(error)
+            return make_response({'success':False,'message':'Something happens wrong on server'}, 409)
 
     @classmethod
     def update(cls, document_id:int, document:Dict[str, Union[int, str, Dict]]):
@@ -172,7 +176,7 @@ class DocumentController:
 
         # Otherwise, nope, didn't find that document
         else:
-            abort(404, f"Document not found for Id: {document_id}")
+            return make_response(f"Document not found for Id: {document_id}", 404)
 
     @classmethod
     def delete(cls, document_id:int):
@@ -195,5 +199,5 @@ class DocumentController:
 
         # Otherwise, nope, didn't find that document
         else:
-            abort(404, f"Document not found for Id: {document_id}")
+            return make_response({'success':True, 'message':f"Document not found for Id: {document_id}", }, 404)
             
