@@ -22,6 +22,12 @@
 
 }
 
+.full-cover 
+{
+    background-size: cover;
+    height: 100%;
+}
+
 .uploaded-item .cover-image img
 {
     width: 64px;

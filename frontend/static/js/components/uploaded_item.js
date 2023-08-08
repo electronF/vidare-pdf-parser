@@ -1,31 +1,38 @@
-class UploadedItem
-{
-    constructor(title, file_path, short_content, file_type, datetime, image_path='image-icon.webp')
-    {
-        this.title = title 
-        this.file_path = file_path  
-        this.short_content = short_content 
-        this.file_type = file_type
-        this.datetime = datetime
-        this.image_path = image_path
-    }
+class UploadedItem {
+  constructor(
+    title,
+    filePath,
+    shortContent,
+    fileType,
+    dateTime,
+    imagePath = "image-icon.webp"
+  ) {
+    this.title = title;
+    this.filePath = filePath;
+    this.shortContent = shortContent;
+    this.fileType = fileType;
+    this.dateTime = dateTime;
+    this.imagePath =
+      typeof imagePath === "string" && imagePath.trim().length > 0
+        ? imagePath
+        : "image-icon.webp";
+  }
 
-    render()
-    {
-        return $(`
+  render() {
+    return $(`
             <div class="uploaded-item" title="${this.title.substring(0, 250)}">
                 <div class="cover-image">
-                    <img src="${this.image_path}" alt="cover image">
+                    <img src="/static/${this.imagePath}" class="${(this.imagePath!="image-icon.webp")?'full-cover':''}" alt="cover image">
                 </div>
                 <div class="content-description">
                     <span class="title">${this.title}</span>
-                    <span class="file-path">${this.file_path}</span>
-                    <div class="text-content">${this.short_content}</div>
+                    <span class="file-path">${this.filePath}</span>
+                    <div class="text-content">${this.shortContent}</div>
                     <div class="footer">
                         <div class="info">
-                            <span class="file-type">${this.file_type}</span>
+                            <span class="file-type">${this.fileType}</span>
                             <span class="divider">|</span>
-                            <span class="datetime">${this.datetime}</span>
+                            <span class="datetime">${this.dateTime}</span>
                         </div>
                         <div class="actions">
                             <button> 
@@ -40,6 +47,8 @@ class UploadedItem
                     </div>
                 </div>
             </div>
-        `)
-    }
+        `);
+  }
 }
+
+export default UploadedItem;

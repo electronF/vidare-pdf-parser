@@ -1,18 +1,20 @@
-async function getFiles(endpoint) 
-{
-    const ctrl = new AbortController()    // timeout
-    setTimeout(() => ctrl.abort(), 500000);
-    
-    try {
-       let r = await fetch(
-         new URL(endpoint), 
-         {
-            method: "GET", 
-            signal: ctrl.signal,
-            "Content-type": "application/json; charset=UTF-8"
-        }); 
-       console.log('HTTP response code:',r.status); 
-    } catch(e) {
-       console.log('Huston we have problem...:', e);
-    }
+async function getFiles(endpoint) {
+  const ctrl = new AbortController(); // timeout
+  setTimeout(() => ctrl.abort(), 500000);
+
+  try {
+    let response = await fetch(endpoint, {
+      method: "GET",
+      signal: ctrl.signal,
+      "Content-type": "application/json; charset=UTF-8",
+    });
+    return await response.json();
+  } catch (e) {
+    return {
+      success: false,
+      message: `An error occured while getting the file: ${e}`,
+    };
+  }
 }
+
+export default getFiles;

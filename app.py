@@ -6,8 +6,7 @@ from flask import (
     render_template, 
     jsonify, 
     request,
-    make_response,
-    abort
+    make_response
 )
 
 # Local modules
@@ -52,11 +51,12 @@ def home(path:str):
 def get_documents():
     """
     This function just responds to the browser URL
-    localhost:5000/api/document/
+    localhost:5000/api/document/ to get the list of 
+    documents
     
     Args:
     Returns:
-        (JSON): A list of dict as list of files
+        (JSON): A list of dict as list of document
     """
     return jsonify(DocumentController.read_all())
 
@@ -65,58 +65,91 @@ def get_documents():
 @connex_app.route("/api/document/", methods=['POST'])
 def create_document():
     """
-    This function just responds to the browser URL
-    localhost:5000/api/document/<file:dict>
-    Args:
-        file(JSON): A file description
-    Returns:
-        Uploading percentage
+        This function just responds to the browser URL
+        localhost:5000/api/document/<file:dict>
+        Args:
+            file(JSON): A file description
+        Returns:
+            Uploading percentage
     """
     uploaded_info = []
     failed_info = []
-    connex_app.logger.info('test2', request.form.get('path', None) == None)
     
-    if request.files.get('file', None) != None and request.form.get('path', None) != None:
+    if (
+        request.files.get('file', None) != None 
+        and request.form.get('path', None) != None
+        ):
         file_obj = request.files['file']
         file_path = request.form.get('path')
-        new_name = filemanager.save_file(file_obj, constants.UPLOADED_FILES)
+        new_name = filemanager.save_file(
+            file_obj, 
+            constants.UPLOADED_DOCUMENTS_PATH)
+        
         if new_name != None:
             filename, _ = os.path.splitext(new_name)
             
             #Create folder to save files
-            output_dir = os.path.join(constants.UPLOADED_FILES, filename)
+            output_dir = os.path.join(constants.UPLOADED_DOCUMENTS_PATH, filename)
             os.makedirs(output_dir)
             
             # Extract information in PDF and save then. The get all the information to use
-            parser = PdfParser(os.path.join(constants.UPLOADED_FILES, new_name), output_dir)
+            parser = PdfParser(
+                os.path.join(constants.UPLOADED_DOCUMENTS_PATH, new_name), 
+                output_dir)
+            
             pages = parser.get_content()
-            first_page_path = parser.split_first_page()
+            # first_page_path = parser.split_first_page()
             
-            response = DocumentController.create(DocumentDTO(name=filename, path=file_path, pages=pages))
-            if response['success'] == False:
-                response['image_path'] = PDF2ImageConverter(first_page_path, output_dir).convert_first_page()
+            cover_image_path = PDF2ImageConverter(
+                        os.path.join(constants.UPLOADED_DOCUMENTS_PATH, new_name), 
+                        constants.COVER_IMAGES_PATH
+                    ).convert_first_page()
             
-            # response['success']=True
+            response = DocumentController.create(
+                DocumentDTO(
+                    name=filename,
+                    path=file_path,
+                    pages=pages,
+                    cover_image_path='{}/{}'.format(constants.COVER_IMAGES_FOLDER, cover_image_path)
+                )
+            )
             
-            # jsonify({'path': file_path, 'name': file_obj.filename, })
-            return make_response(201, response)
+            code = response.pop('code', 201)
+            return make_response(jsonify(response), code)
         else:
-            connex_app.logger.error('Filename error', 'The filename is None or no file name has been found')
+            connex_app.logger.error(
+                'Filename error', 
+                'The filename is None or no file name has been found'
+            )
             return make_response(
-                {
+                jsonify({
                     'success':False,  
                     'message':'Something happens wrong on saver with filename.'
-                },
+                }),
                 500,
             )
     else:
         return make_response(
-            {
+            jsonify({
                 'success':False,  
                 'message':'Something happens wrong on saver with filename.'
-            },
+            }),
             500
         )
+
+# Create a URL route in our application for "/api/document/coverimage/"
+@connex_app.route("/api/document/image/<string:image_id>", methods=['GET'])
+def document(image_id):
+    """
+    This function just responds to the browser URL
+    localhost:5000/document/image/<image:str>
+    
+    Args:
+        image_id(str): The id of the image to get
+    Returns:
+        (JSON): The success indicator and the image as base64
+    """
+    return image_id
 
 
 # Create a URL route in our application for "/api/document/"

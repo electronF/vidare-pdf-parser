@@ -1,7 +1,6 @@
 
 # Built-in modules
 import os
-import uuid
 from typing import Dict, List, Union
 
 # External modules
@@ -25,8 +24,8 @@ class PDF2ImageConverter:
             Returns:
                 None
         '''
-        file_name, _ = os.path.splitext(os.path.basename(file_path))
-        self.path_to_folder = os.path.join(output_dir_path, file_name)
+        self.file_name, _ = os.path.splitext(os.path.basename(file_path))
+        self.path_to_folder = os.path.join(output_dir_path)
         self.pdf_images = convert_from_path(file_path)
         
         if not os.path.exists(self.path_to_folder):
@@ -37,9 +36,9 @@ class PDF2ImageConverter:
             Convert only the first page of the pdf as image and return the path of the image.
             Args:
             Returns:
-                (str): The path of the first page on the disk as image. Or raise an error.
+                (str): The name of the first page on the disk as image. Or raise an error.
         '''
-        path = os.path.join(self.path_to_folder, 'page0-{}.png'.format(str(uuid.uuid1())))
+        path = '{}.png'.format(self.file_name)
         self.pdf_images[0].save(
             fp=path,
             bitmap_format='png'
@@ -53,12 +52,16 @@ class PDF2ImageConverter:
             
             Args:
             Returns:
-                (List[str]): The list of paths of pages of the pdf as images.
+                (List[str]): The list of names of pages of the pdf as images.
         '''
+        #Create a directory with the name of the document on server to save images
+        self.path_to_folder = os.path.join(self.path_to_folder, self.file_name)
+        if not os.path.exists(self.path_to_folder):
+            os.makedirs(self.path_to_folder)
         
         paths = []
         for index, image in enumerate(self.pdf_images):
-            path = os.path.join(self.path_to_folder, 'page{}.png'.format(index))
+            path = 'page{}.png'.format(index)
             image.save(
                 fp=path,
                 bitmap_format='png'

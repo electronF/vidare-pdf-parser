@@ -95,6 +95,7 @@ class DocumentController:
         db_model_document = Document(
             name = document.name, 
             title = title,
+            cover_image_path = document.cover_image_path,
             author = '',
             path = document.path,
             publication_date = None,
@@ -130,14 +131,19 @@ class DocumentController:
             # Serialize and return the newly created document in the response
             data = schema.dump(document)
             data['content'] = content
-            
-
-            return make_response(data, 201)
+            data['code'] = 201
+            data['success'] = True
+            return  data
+        
         except Exception as error:
             # Otherwise, nope, document exists already
             # abort(409, f"Document {document.name} exists already")
             connexion_app.logger.error(error)
-            return make_response({'success':False,'message':'Something happens wrong on server'}, 409)
+            return {
+                'success': False,
+                'message': 'Something happens wrong on server', 
+                'code': 409
+            }
 
     @classmethod
     def update(cls, document_id:int, document:Dict[str, Union[int, str, Dict]]):

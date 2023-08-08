@@ -29,6 +29,7 @@ class Document(database.Model):
     title = mapped_column(String, default='')
     author = mapped_column(String, default=None)
     path = mapped_column(String, nullable=False)
+    cover_image_path = mapped_column(String, nullable=True)
     publication_date = mapped_column(DateTime)
     
     add_at = mapped_column(
@@ -47,12 +48,13 @@ class Document(database.Model):
     )
     
     def __repr__(self) -> str:
-        return """Document(id={}, name='{}', title='{}', author='{}', path='{}', publication_date='{}', add_at='{}', pages='{} pages in the document')""".format(
+        return """Document(id={}, name='{}', title='{}', author='{}', path='{}', cover_image_path='{}' publication_date='{}', add_at='{}', pages='{} pages in the document')""".format(
             self.id,
             self.name, 
             self.title, 
             self.author, 
             self.path,
+            self.cover_image_path,
             self.publication_date,
             self.add_at,
             len([] if self.pages==None else self.pages)
@@ -68,6 +70,7 @@ class DocumentSchema(marsmallow.SQLAlchemySchema):
     title = auto_field()
     author = auto_field()
     path = auto_field()
+    cover_image_path = auto_field()
     publication_date = auto_field()
     add_at = auto_field()
     pages = auto_field()
