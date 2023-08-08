@@ -1,0 +1,33 @@
+03/08/2023 23:29 Polytechnique Montreal - Admission en ligne
+https://admission.polymtl.ca/admission-main-web/pages/admission-dashboard.xhtml?fragmentName=fragments-demande/admission-post-paiement.xhtml&JSE … 1/2
+ (http://www.polymtl.ca/)
+ADMISSION EN LIGNE 
+AIDE >>  (http://www .polymtl.ca/admission/aide-admission-en-ligne#autorisations-et-
+paiement)Faire une demande d'admission (../pages/admission-dashboard.xhtml?fragmentName=fragments-
+demande%2Fadmission-demande-init.xhtml)
+Consulter ou modiﬁer vos demandes d'admission
+Suivre vos dossiers
+Paramètres du compte (../pages/admission-dashboard.xhtml?fragmentName=fragments-compte%2Fadmission-proﬁl-
+change.xhtml)
+Se déconnecter
+Bonjour Ovide Bertrand K uichua Kamdem,
+Numéro de candidature : 276559
+Numéro matricule étudiant : à venir
+* OBLIGATOIRE
+ÉTAPE : P AIEMENT
+Statut de la transaction : Approuvée
+Type de transaction : Achat
+Date de la transaction : 03/08/2023 18:23:28
+Numéro de référence : 2SFBUG4F51GFLEHTFE
+Numéro d'autorisation : 097206
+Numéro de confirmation : 19499727284
+Type de carte : visa
+Numéro de carte : XXXX XXXX 2477
+Montant total : 95,92 CAD
+Prénom et nom de l'acheteur : Ovide Bertrand K uichua Kamdem
+Pas de remboursement
+Non taxable
+Détails de la transaction : Frais d'admission
+Numéro de candidature : 276559
+Numéro de la demande : 172456
+CONFIRMA TIONE N G L I S H

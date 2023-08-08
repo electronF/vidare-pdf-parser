@@ -38,12 +38,13 @@ class PDF2ImageConverter:
             Returns:
                 (str): The name of the first page on the disk as image. Or raise an error.
         '''
-        path = '{}.png'.format(self.file_name)
+        file_path = '{}.png'.format(self.file_name)
+        full_path = os.path.join(self.path_to_folder, file_path)
         self.pdf_images[0].save(
-            fp=path,
+            fp=full_path,
             bitmap_format='png'
         )
-        return path
+        return file_path
         
     
     def convert_pages(self) -> List[str]:

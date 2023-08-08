@@ -8,7 +8,7 @@ import PyPDF2 as pypdf
 #Local modules
 
 
-class PdfParser:
+class PDFParser:
     '''
         Parse PDF file.
     '''

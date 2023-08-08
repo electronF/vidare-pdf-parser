@@ -16,8 +16,9 @@ import utils.filemanager as filemanager
 
 from webapi.modelsDTO.document import DocumentDTO
 from webapi.controllers.document import DocumentController
-from webapi.services.readpdf import PdfParser
+from webapi.services.readpdf import PDFParser
 from webapi.services.pdfconverter import PDF2ImageConverter
+from webapi.services.file_verificator import FileVerificator
 
 
 # Get the application instance
@@ -41,8 +42,8 @@ def home(path:str):
     localhost:5000/
     :return:        the rendered template "inconstruction_page.html"
     """
-    
-    return render_template("dashboard.html")
+    documents = DocumentController.read_all()
+    return render_template("dashboard.html", documents=documents)
 
 
 
@@ -58,7 +59,23 @@ def get_documents():
     Returns:
         (JSON): A list of dict as list of document
     """
-    return jsonify(DocumentController.read_all())
+    try:
+        return make_response(
+            jsonify({
+                'success': True,
+                'data':DocumentController.read_all()
+            }),
+            201
+        )
+    except Exception as error:
+        connex_app.logger('info', error)
+        return make_response (
+            jsonify({
+                'success': False,
+                'message': 'something happen wrong on server'
+            }),
+            500
+        )
 
 
 # Create a URL route in our application for "/api/document/"
@@ -78,6 +95,7 @@ def create_document():
     if (
         request.files.get('file', None) != None 
         and request.form.get('path', None) != None
+        and FileVerificator.is_file_in_allowed_type(request.files['file'].filename)
         ):
         file_obj = request.files['file']
         file_path = request.form.get('path')
@@ -93,7 +111,7 @@ def create_document():
             os.makedirs(output_dir)
             
             # Extract information in PDF and save then. The get all the information to use
-            parser = PdfParser(
+            parser = PDFParser(
                 os.path.join(constants.UPLOADED_DOCUMENTS_PATH, new_name), 
                 output_dir)
             
@@ -110,6 +128,7 @@ def create_document():
                     name=filename,
                     path=file_path,
                     pages=pages,
+                    type=FileVerificator.get_type(new_name).upper(),
                     cover_image_path='{}/{}'.format(constants.COVER_IMAGES_FOLDER, cover_image_path)
                 )
             )
@@ -128,6 +147,16 @@ def create_document():
                 }),
                 500,
             )
+    elif (FileVerificator.is_file_in_allowed_type(request.files['file'].filename)):
+        return make_response(
+            jsonify({
+                'success':False,  
+                'message':'The file type is not allwed.'
+            }),
+            401
+        )
+    #Add file size checker here
+    
     else:
         return make_response(
             jsonify({

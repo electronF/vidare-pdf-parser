@@ -9,9 +9,9 @@ class UploadedItem {
   ) {
     this.title = title;
     this.filePath = filePath;
-    this.shortContent = shortContent;
+    this.shortContent = (shortContent??'').substring(0, 250);
     this.fileType = fileType;
-    this.dateTime = dateTime;
+    this.dateTime = (new Date(dateTime)).toUTCString();
     this.imagePath =
       typeof imagePath === "string" && imagePath.trim().length > 0
         ? imagePath

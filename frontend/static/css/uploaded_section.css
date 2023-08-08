@@ -11,11 +11,36 @@
     box-shadow: 0px 2px 4px rgba(100,100,100,0.5);
 }
 
-.uploaded-section > .title
+.uploaded-section .header-bar
+{
+    display: flex;
+    margin-bottom: 40px;
+
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.uploaded-section .header-bar > *
+{
+    margin: 5px;
+}
+
+.uploaded-section .header-bar .title
 {
     color: #757575;
     font-size: 18px;
-    margin-bottom: 40px;
+    
+}
+
+.uploaded-section .header-bar .refresh-button
+{
+    background-color: #000C77;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    width: fit-content;   
+    padding: 10px 1em;
 }
 
 .uploaded-section .uploaded-files

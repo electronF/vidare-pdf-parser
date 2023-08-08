@@ -37,6 +37,21 @@ class DocumentController:
         return data
 
     @classmethod
+    def read_all_obj(cls)->(Union[List[Dict[str, Any]], None]):
+        """
+        This function responds to a request for /api/document
+        with the complete lists of documents.
+        
+        Args:\n
+        Returns:
+            (List[Dict] | None): json string of list of documents
+        """
+        # Create the list of documents
+        documents = database.session.query(Document).order_by(Document.add_at).all()
+
+        return documents
+
+    @classmethod
     def read_one(cls, document_id:int)->(Union[Dict[str, Any], None]):
         """
         This function responds to a request for /api/document/{id}
@@ -89,12 +104,14 @@ class DocumentController:
         for page in document.pages:
             text = page['text'].strip()
             if len(text) > 50:
-                content = page['text']
+                content = page['text'][:500]
                 break
         
         db_model_document = Document(
-            name = document.name, 
+            name = document.name,
             title = title,
+            type = document.type,
+            short_content = content,
             cover_image_path = document.cover_image_path,
             author = '',
             path = document.path,
@@ -130,7 +147,6 @@ class DocumentController:
 
             # Serialize and return the newly created document in the response
             data = schema.dump(document)
-            data['content'] = content
             data['code'] = 201
             data['success'] = True
             return  data

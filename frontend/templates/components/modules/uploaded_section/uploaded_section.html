@@ -6,10 +6,23 @@
 {% block body %}
     {% from 'components/uix/uploaded_item/uploaded_item.html' import uploaded_item %}
     <div class="uploaded-section">
-        <span class="title"> Uploaded files </span>
+        <div class="header-bar">
+            <span class="title"> Uploaded files </span>
+            <button class="refresh-button" id="refresh-uploaded-items"> Refresh </button>
+        </div>
+        
         <div class="uploaded-files" id="uploaded-files">
-            {% for i in range(2) %}
-                {{ uploaded_item('A super interesting title', 'C:\\Users\\Vidare\\Desktop\\Document1.pdf', 'A number of key issues arise from the belief that in terms of the essential component requires urgent actions to be taken towards The Control of New Evolution (Jake Acevedo in The Book of the Basic Reason of The Principles of Effective Management) ', 'PDF', '24 June 2023 at 17:16:20', 'image-icon.webp')  }}
+            {% for document in documents %}
+                {{
+                    uploaded_item(
+                        document['title'], 
+                        document['path'], 
+                        document['short_content'],
+                        document['type'], 
+                        document['add_at'], 
+                        document['cover_image_path']
+                    )  
+                }}
             {% endfor %}
         </div>
     </div>

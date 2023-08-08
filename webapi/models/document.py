@@ -27,11 +27,12 @@ class Document(database.Model):
     id = mapped_column(Integer, primary_key=True)
     name = mapped_column(String, nullable=False)
     title = mapped_column(String, default='')
+    short_content = mapped_column(String)
     author = mapped_column(String, default=None)
     path = mapped_column(String, nullable=False)
+    type = mapped_column(String, default='pdf')
     cover_image_path = mapped_column(String, nullable=True)
     publication_date = mapped_column(DateTime)
-    
     add_at = mapped_column(
                         DateTime, 
                         default=datetime.utcnow, 
@@ -48,12 +49,14 @@ class Document(database.Model):
     )
     
     def __repr__(self) -> str:
-        return """Document(id={}, name='{}', title='{}', author='{}', path='{}', cover_image_path='{}' publication_date='{}', add_at='{}', pages='{} pages in the document')""".format(
+        return """Document(id={}, name='{}', title='{}', short_content='{}' author='{}', path='{}', type='{}' cover_image_path='{}' publication_date='{}', add_at='{}', pages='{} pages in the document')""".format(
             self.id,
             self.name, 
             self.title, 
+            self.short_content,
             self.author, 
             self.path,
+            self.type,
             self.cover_image_path,
             self.publication_date,
             self.add_at,
@@ -68,8 +71,10 @@ class DocumentSchema(marsmallow.SQLAlchemySchema):
     id = auto_field()
     name = auto_field()
     title = auto_field()
+    short_content = auto_field()
     author = auto_field()
     path = auto_field()
+    type = auto_field()
     cover_image_path = auto_field()
     publication_date = auto_field()
     add_at = auto_field()
