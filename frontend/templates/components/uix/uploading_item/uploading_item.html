@@ -11,10 +11,12 @@
             <div class="header">
                 <span class="name">{{name}}</span>
                 <span class="size">{{size}}</span>
-                <button class="close"><img src="{{url_for('static', filename='images/close-icon.webp')}}" alt=""></button>
+                <button class="close">
+                    <img src="{{url_for('static', filename='images/close-icon.webp')}}" alt="">
+                </button>
             </div>
             <div class="progress-bar">
-                <input type="range" min="0" value="50" max="100" id="progress" >
+                <input type="range" min="0" value="50" max="100" />
             </div>
             <div class="progression-label">
                 <span class="percentage">0%</span>

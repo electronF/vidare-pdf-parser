@@ -24,7 +24,7 @@ class UploadingItem
                             </button>
                         </div>
                         <div class="progress-bar">
-                            <input type="range" min="0" max="100" id="progress-${this.id}" disabled>
+                            <input type="range" min="0" max="100" value='0' id="progress-${this.id}">
                         </div>
                         <div class="progression-label">
                             <span class="percentage" id="percentage-${this.id}">0%</span>

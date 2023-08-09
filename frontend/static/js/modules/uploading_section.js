@@ -1,5 +1,5 @@
 import UploadingItem from "../components/uploading_item.js";
-import saveFile from "../hooks/sendfile.js";
+import { saveFile, saveFileWithCallback } from "../hooks/sendfile.js";
 import { fileVerificator, fileSize, fileName } from "../utils/function.js";
 import { POST_DOCUMENT } from "../constants.js";
 import UploadedSection from "./uploaded_section.js";
@@ -16,14 +16,24 @@ class UploadingSection {
     this.uploadedSection = new UploadedSection();
   }
 
-  async uploadFile(file, path, uploadingItem) {
-    var response = await saveFile(file, path, POST_DOCUMENT);
-    if (response["success"] === false) {
-      alert(response["message"]);
-    } else {
-      uploadingItem.remove();
-      this.uploadedSection.addItem(response);
+  async uploadFile(file, path, uploadingItem, id) {
+    // var response = await saveFile(file, path, POST_DOCUMENT);
+    
+    var responseFunction = (response) => {
+      if (response["success"] === false) {
+        alert(response["message"]);
+      } else {
+        uploadingItem.remove();
+        this.uploadedSection.addItem(response);
+      }
     }
+
+    var progressFunction = (percentage) => {
+      uploadingItem.find("#percentage-"+id).text(`${percentage.toFixed(0)}%`);
+      uploadingItem.find("#progress-"+id).text(`${percentage.toFixed(0)}%`);
+    }
+    
+    saveFileWithCallback(file, path, POST_DOCUMENT, responseFunction, progressFunction)
   }
 
   fileSaver = (files, paths) => {
@@ -42,7 +52,7 @@ class UploadingSection {
           ).render()
         );
         uploadedItems.append(uploadingItem);
-        this.uploadFile(file, paths[count - 1] ?? file.name, uploadingItem);
+        this.uploadFile(file, paths[count - 1] ?? file.name, uploadingItem, count);        
       } else {
         alert(message);
       }

@@ -30,7 +30,6 @@ class UploadedSection {
     var button = uploadedItem.find("button.delete");
     try {
         $(button).on('click', async function(){
-          alert('ok')
             var response  = await deleteFile(itemDescriptiom['id'], DELETE_DOCUMENT)
             if(response['success'] === true)
             {
