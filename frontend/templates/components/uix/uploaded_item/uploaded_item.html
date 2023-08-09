@@ -1,7 +1,7 @@
 {% macro uploaded_item(title, file_path, short_content, file_type, datetime, image_path='image-icon.webp')  -%}
     <div class="uploaded-item" title="{{title}}">
         <div class="cover-image" title="{{title}}">
-            <img src="{{url_for('static', filename='{}'.format(['images/image-icon.webp', image_path][image_path!=None and image_path.split()!='']))}}" class="{{['', 'full-cover'][image_path!=None and image_path.split()!='']}}" alt="cover image">
+            <img src="{{url_for('static', filename='{}'.format(['images/image-icon.webp', 'covers/'+image_path][image_path!=None and image_path.split()!='']))}}" class="{{['', 'full-cover'][image_path!=None and image_path.split()!='']}}" alt="cover image">
         </div>
         <div class="content-description">
             <span class="title">{{title}}</span>
@@ -14,8 +14,14 @@
                     <span class="datetime">{{datetime}}</span>
                 </div>
                 <div class="actions">
-                    <button> <img  class="icon" src="{{url_for('static', filename='images/trash-icon.webp')}}" /><span>Delete</span> </button>
-                    <button> <img class="icon" src="{{url_for('static', filename='images/eye-icon.webp')}}" /><span>View</span> </button>
+                    <button class="delete"> 
+                        <img  class="icon" src="{{url_for('static', filename='images/trash-icon.webp')}}" />
+                        <span>Delete</span> 
+                    </button>
+                    <button class="preview">
+                        <img class="icon" src="{{url_for('static', filename='images/eye-icon.webp')}}" />
+                        <span>View</span>
+                    </button>
                 </div>
             </div>
         </div>

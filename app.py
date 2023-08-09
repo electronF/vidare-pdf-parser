@@ -129,7 +129,7 @@ def create_document():
                     path=file_path,
                     pages=pages,
                     type=FileVerificator.get_type(new_name).upper(),
-                    cover_image_path='{}/{}'.format(constants.COVER_IMAGES_FOLDER, cover_image_path)
+                    cover_image_path=cover_image_path
                 )
             )
             
@@ -166,9 +166,9 @@ def create_document():
             500
         )
 
-# Create a URL route in our application for "/api/document/coverimage/"
-@connex_app.route("/api/document/image/<string:image_id>", methods=['GET'])
-def document(image_id):
+# Create a URL route in our application for "/api/document/"
+@connex_app.route("/api/document/<int:document_id>", methods=['DELETE'])
+def document(document_id:int):
     """
     This function just responds to the browser URL
     localhost:5000/document/image/<image:str>
@@ -178,7 +178,10 @@ def document(image_id):
     Returns:
         (JSON): The success indicator and the image as base64
     """
-    return image_id
+    response = DocumentController.delete(document_id)
+    code = response.pop('code')
+    connex_app.logger.info('error', str(response))
+    return make_response(jsonify(response), code)
 
 
 # Create a URL route in our application for "/api/document/"

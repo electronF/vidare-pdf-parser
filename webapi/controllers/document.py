@@ -1,4 +1,5 @@
 # Built-in modules
+import os
 from typing import Dict, List, Union, Any
 
 # External modules
@@ -6,11 +7,14 @@ from flask import make_response, abort, jsonify
 
 #Local modules
 from configs import database, connexion_app
+from constants import COVER_IMAGES_PATH, UPLOADED_DOCUMENTS_PATH
 
 from webapi.models.document import Document, DocumentSchema 
 from webapi.models.page import Page, PageSchema
 from webapi.models.image import Image, ImageSchema
 from webapi.modelsDTO.document import DocumentDTO
+
+from webapi.services.delete_file import FileRemover
 
 
 class DocumentController:
@@ -141,12 +145,18 @@ class DocumentController:
             database.session.add(db_model_document)
             database.session.commit()
             
+            # Uncomment the two nexts lines of code if the id of insterted data
+            # is not automatically add to the instance
+            
+            # database.session.flush()
+            # database.session.refresh(db_model_document)
+            
             # Create a document instance using the schema
             schema = DocumentSchema()
             # new_document = schema.load(db_model_document, session=database.session)
 
             # Serialize and return the newly created document in the response
-            data = schema.dump(document)
+            data = schema.dump(db_model_document)
             data['code'] = 201
             data['success'] = True
             return  data
@@ -215,11 +225,35 @@ class DocumentController:
 
         # Delete the document if its exists
         if document is not None:
-            database.session.delete(document)
-            database.session.commit()
-            return make_response(f"Document with Id {document_id} has been deleted", 200)
-
-        # Otherwise, nope, didn't find that document
+            
+            # document_path = os.path.join(UPLOADED_DOCUMENTS_PATH, '{}.{}'.format(document.name, document.type))
+            removed_message = FileRemover.remove_file_and_folder(UPLOADED_DOCUMENTS_PATH, document.name)
+            must_be_delete = removed_message == None
+            error_message = '' if removed_message==None else removed_message
+            if document.cover_image_path != None and document.cover_image_path.split() != '':
+                cover_image_path  = os.path.join(COVER_IMAGES_PATH, document.cover_image_path)
+                removed_message = FileRemover.remove_file(cover_image_path)
+                must_be_delete = must_be_delete and removed_message == None
+                error_message = error_message + ('' if removed_message==None else ('\n'+removed_message))
+            
+            if must_be_delete:    
+                database.session.delete(document)
+                database.session.commit()
+                return {
+                        'success': True,
+                        'message':f"Document with Id {document_id} has been deleted",
+                        'code': 201
+                    } 
+            else:
+                return {
+                        'success': False,
+                        'message':f"Something happend wrong on server. {error_message}",
+                        'code': 500
+                    } 
         else:
-            return make_response({'success':True, 'message':f"Document not found for Id: {document_id}", }, 404)
+            return {
+                    'success':False, 
+                    'message':f"Document not found for Id: {document_id}", 
+                    'code': 404
+                }
             

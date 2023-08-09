@@ -22,7 +22,7 @@ class UploadedItem {
     return $(`
             <div class="uploaded-item" title="${this.title.substring(0, 250)}">
                 <div class="cover-image">
-                    <img src="/static/${this.imagePath}" class="${(this.imagePath!="image-icon.webp")?'full-cover':''}" alt="cover image">
+                    <img src="/static/covers/${this.imagePath}" class="${(this.imagePath!="image-icon.webp")?'full-cover':''}" alt="cover image">
                 </div>
                 <div class="content-description">
                     <span class="title">${this.title}</span>
@@ -35,11 +35,11 @@ class UploadedItem {
                             <span class="datetime">${this.dateTime}</span>
                         </div>
                         <div class="actions">
-                            <button> 
+                            <button class='delete'> 
                                 <img  class="icon" src="/static/images/trash-icon.webp" />
                                 <span>Delete</span>
                             </button>
-                            <button>
+                            <button class='preview'>
                                 <img class="icon" src="/static/images/eye-icon.webp" />
                                 <span>View</span>
                             </button>

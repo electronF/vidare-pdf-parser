@@ -1,7 +1,7 @@
 import UploadingItem from "../components/uploading_item.js"
 import saveFile from "../hooks/sendfile.js";
 import { fileVerificator, fileSize, fileName } from "../utils/function.js";
-import {POST_DOCUMENT } from "../constants.js";
+import {POST_DOCUMENT} from "../constants.js";
 import UploadedSection from "./uploaded_section.js";
 
 
@@ -45,7 +45,6 @@ class UploadingSection
                 var count = 0
                 var files = {}
                 var paths = inputFiles[0].value.split(';')
-                console.log({path: inputFiles[0].value})
                 for(var file of inputFiles[0].files)
                 {
                     var message = fileVerificator(file)
